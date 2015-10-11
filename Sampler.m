@@ -6,8 +6,8 @@ classdef Sampler < Inference
   end
   
   methods
-    function s = sample(~, erp, varargin)
-      s = sample(erp, varargin{:});
+    function sample(~, erp, pars, k)
+      k(sample(erp, pars{:}));
     end
   end
   

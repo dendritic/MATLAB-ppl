@@ -6,7 +6,7 @@ classdef Inference
   end
   
   methods (Abstract)
-    s = sample(obj, erp, varargin)
+    sample(obj, erp, pars, k)
   end
   
 end
