@@ -17,7 +17,6 @@ e = Enumerator;
   end
 
 
-binomial3(@disp)
-
+binomial3(@e.run)
 end
 

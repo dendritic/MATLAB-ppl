@@ -21,11 +21,7 @@ classdef Bernoulli < erp.ERP
     end
     
     function lp = score(~, pSuccess, x)
-      if x
-        lp = log(pSuccess);
-      else
-        lp = log(1 - pSuccess);
-      end
+      lp = log(~x + (2*(x == 1) - 1).*pSuccess);
     end
   end
   
