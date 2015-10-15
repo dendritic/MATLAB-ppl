@@ -16,7 +16,7 @@ e = Enumerator;
 %     nSuccess = a + b + c;
   end
 
-
-binomial3(@e.run)
+run(e, @binomial3)
+[cell2mat(keys(e.ValueProbs))' cell2mat(values(e.ValueProbs))']
 end
 

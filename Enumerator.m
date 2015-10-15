@@ -3,28 +3,43 @@ classdef Enumerator < Inference
   %   Detailed explanation goes here
   
   properties
-    UnexploredConts = {}
-    UnexploredDScores = []
+    Futures = {}
     CurrentScore = 0
-    Results = struct('value', {}, 'score', {})
+    ValueProbs = containers.Map('KeyType', 'double', 'ValueType', 'double')
   end
   
   methods
     function sample(env, erp, pars, k)
       sup = support(erp, pars{:});
-      scores = score(erp, pars{:}, sup);
-      paths = mapToCell(@(x)@()k(x), sup);
-      env.UnexploredConts = cat(1, env.UnexploredConts, paths(1:end-1));
-      env.UnexploredDScores = cat(1, env.UnexploredDScores, scores(1:end-1));
-      env.CurrentScore = env.CurrentScore + scores(end);
-      paths{end}();
-%       arrayfun(k, s);
+      scores = score(erp, pars{:}, sup) +  env.CurrentScore;
+      futures = mapToCell(@(v,s) @()resume(env, k, v, s), sup, scores);
+      env.Futures = cat(2, env.Futures, futures(1:end-1));
+      futures{end}();
     end
     
-    function run(env, res)
-      env.Results(end+1).value = res;
-      env.Results(end).score = env.CurrentScore;
-      
+    function finish(env, res)
+      if isKey(env.ValueProbs, res)
+        env.ValueProbs(res) = env.ValueProbs(res) + exp(env.CurrentScore);
+      else
+        env.ValueProbs(res) = exp(env.CurrentScore);
+      end
+      if ~isempty(env.Futures)
+        nextFuture = env.Futures{end};
+        env.Futures(end) = [];
+        nextFuture();
+      end
+    end
+    
+    function resume(env, k, v, score)
+      env.CurrentScore = score;
+      k(v);
+    end
+    
+    function run(env, comp)
+      comp(@env.finish);
+      probs = cell2mat(values(env.ValueProbs));
+      probs = probs/sum(probs);
+      env.ValueProbs = containers.Map(keys(env.ValueProbs), probs);
     end
   end
   
