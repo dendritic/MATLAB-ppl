@@ -7,6 +7,7 @@ classdef Inference < handle
   
   methods (Abstract)
     sample(obj, erp, pars, k)
+    factor(obj, score)
   end
   
 end

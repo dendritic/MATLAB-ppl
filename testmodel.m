@@ -4,10 +4,12 @@ function testmodel()
 
 e = Enumerator;
 
+p = {0.25};
+
   function binomial3(k)
-    sample(e, erp.Bernoulli, {0.5},...
-      @(a)sample(e, erp.Bernoulli, {0.5},...
-      @(b)sample(e, erp.Bernoulli, {0.5},...
+    sample(e, erp.Bernoulli, p,...
+      @(a)sample(e, erp.Bernoulli, p,...
+      @(b)sample(e, erp.Bernoulli, p,...
       @(c)k(a + b + c))));
     
 %     a = sample(env, erp.Bernoulli, 0.5, k);
@@ -16,7 +18,6 @@ e = Enumerator;
 %     nSuccess = a + b + c;
   end
 
-run(e, @binomial3)
-[cell2mat(keys(e.ValueProbs))' cell2mat(values(e.ValueProbs))']
+print(e, @binomial3, gca);
 end
 
