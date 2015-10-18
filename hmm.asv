@@ -1,10 +1,13 @@
-function testmodel()
-%UNTITLED6 Summary of this function goes here
+function hmm()
+%UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 e = Enumerator;
 
-p = {0.25};
+  function transition(s, k)
+    p = s*.7 + ~s*.3;
+    sample(e, erp.Bernoulli, {p}, @(new)k(new));
+  end
 
   function binomial3(k)
     sample(e, erp.Bernoulli, p,...
@@ -19,4 +22,6 @@ p = {0.25};
   end
 
 print(e, @binomial3, gca);
+
 end
+
