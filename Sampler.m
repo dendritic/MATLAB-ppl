@@ -9,6 +9,13 @@ classdef Sampler < Inference
     function sample(~, erp, pars, k)
       k(sample(erp, pars{:}));
     end
+    
+    function factor(~, ~)
+    end
+    
+    function [vals, probs] = run(~, comp)
+      comp(@disp);
+    end
   end
   
 end

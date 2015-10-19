@@ -2,7 +2,7 @@ function hmm()
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-e = Enumerator;
+e = Sampler;
 
   function transition(s, k)
     p = s*.7 + ~s*.3;
@@ -15,14 +15,14 @@ e = Enumerator;
   end
 
   function hmm(k)
-    k(1);
+    observe(false, k);
 %     a = sample(env, erp.Bernoulli, 0.5, k);
 %     b = sample(env, erp.Bernoulli, 0.5, k);
 %     c = sample(env, erp.Bernoulli, 0.5, k);
 %     nSuccess = a + b + c;
   end
 
-print(e, @hmm, gca);
+run(e, @hmm);
 
 end
 
