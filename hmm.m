@@ -6,23 +6,28 @@ e = Sampler;
 
   function transition(s, k)
     p = s*.7 + ~s*.3;
-    sample(e, erp.Bernoulli, {p}, @(a)k(a));
+    sample(e, erp.Bernoulli, {p}, k);
   end
 
   function observe(s, k)
     p = s*.9 + ~s*.1;
-    sample(e, erp.Bernoulli, {p}, @(a)k(a));
+    sample(e, erp.Bernoulli, {p}, k);
   end
 
-  function hmm(k)
-    observe(false, k);
-%     a = sample(env, erp.Bernoulli, 0.5, k);
-%     b = sample(env, erp.Bernoulli, 0.5, k);
-%     c = sample(env, erp.Bernoulli, 0.5, k);
-%     nSuccess = a + b + c;
+  function hmm(n, k)
+    function update(prev)
+      transition(prev.states(end),...
+        @(s)observe(s,...
+        @(o)k(struct('states', [prev.states s], 'observations', [prev.observations o]))));
+    end
+    if n == 1
+      update(struct('states', true, 'observations', []));
+    else
+      hmm(n - 1, @update)
+    end
   end
 
-run(e, @hmm);
+run(e, @(k)hmm(4,k));
 
 end
 
