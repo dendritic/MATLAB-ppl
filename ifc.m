@@ -1,13 +1,12 @@
-function ifc(trueVal, falseVal, k)
+function ifc(pred, trueFun, falseFun, k)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 if pred
-  k(trueVal);
+  trueFun(k);
 else
-  k(falseVal);
+  falseFun(k);
 end
-
 
 end
 

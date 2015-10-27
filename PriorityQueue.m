@@ -34,8 +34,9 @@ classdef PriorityQueue < handle
         q.pValues = value;
       else
         splitAt = firstLarger(q.pValues(1:q.NumElem), value);
-        q.pItems = cat(2, q.pItems(1:splitAt-1), {item}, q.pItems(splitAt:end));
-        q.pValues = cat(2, q.pValues(1:splitAt-1), value, q.pValues(splitAt:end));
+        right = q.pItems(splitAt:q.NumElem);
+        q.pItems = [q.pItems(1:splitAt-1) {item} right];
+        q.pValues = [q.pValues(1:splitAt-1) value q.pValues(splitAt:q.NumElem)];
       end
       q.NumElem = q.NumElem + 1;
     end
